@@ -1,0 +1,20 @@
+li {
+  font-size: 20px;
+  font-weight: 400;
+}
+.text {
+  margin: 0;
+  padding-bottom: 10px;
+  display: inline-block;
+  margin-right: 20px;
+}
+.button {
+  font-size: 12px;
+  padding: 0 10px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  &:active {
+    background-color: blue;
+    color: azure;
+  }
+}
