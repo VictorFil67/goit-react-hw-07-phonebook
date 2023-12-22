@@ -2,10 +2,16 @@ import { useState } from 'react';
 import s from './ContactForm.module.css';
 
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createContactThunk } from 'store/operations';
+import { selectContacts } from 'store/selectors';
 // rfc - create func
 export const ContactForm = ({ createContact }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
   const handleChange = ({ target }) => {
     if ([target.name][0] === 'name') {
@@ -18,7 +24,14 @@ export const ContactForm = ({ createContact }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    createContact({ name, number });
+    const isName = contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    if (!isName) {
+      dispatch(createContactThunk({ name, number }));
+    } else {
+      alert(`${name} is already in contacts`);
+    }
     setName('');
     setNumber('');
   };

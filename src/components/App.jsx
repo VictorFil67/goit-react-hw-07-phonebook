@@ -2,17 +2,28 @@ import { ContactForm } from './ContactForm/ContactForm';
 import { Contacts } from './Contacts/Contacts';
 import { SearchFilter } from './SearchFilter/SearchFilter';
 import { useDispatch, useSelector } from 'react-redux';
+import { createContactAction, setFilterAction } from '../store/contactsSlice';
+import { useEffect } from 'react';
+import { deleteContactThunk, fetchContactsThunk } from 'store/operations';
 import {
-  createContactAction,
-  deleteContactAction,
-  setFilterAction,
-} from '../store/contactsSlice';
+  selectContacts,
+  selectError,
+  selectFilter,
+  selectIsLoading,
+} from 'store/selectors';
 
 export const App = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
-  const filter = useSelector(state => state.contacts.filter);
+  const contacts = useSelector(selectContacts);
+
+  const filterText = useSelector(selectFilter);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchContactsThunk());
+  }, [dispatch]);
 
   // useEffect(() => {
   //   const contacts = JSON.parse(localStorage.getItem('ContactsData'));
@@ -34,7 +45,6 @@ export const App = () => {
       item => item.name.toLowerCase() === contact.name.toLowerCase()
     );
     if (!isName) {
-      // setContacts(prev => [...prev, newContact]);
       dispatch(createContactAction(contact));
     } else {
       alert(`${contact.name} is already in contacts`);
@@ -43,7 +53,7 @@ export const App = () => {
 
   const handleDeleteContact = contactId => {
     // setContacts(prev => prev.filter(contact => contact.id !== contactId));
-    dispatch(deleteContactAction(contactId));
+    dispatch(deleteContactThunk(contactId));
   };
 
   const handleSetFilter = e => {
@@ -52,11 +62,12 @@ export const App = () => {
     dispatch(setFilterAction(e.target.value));
   };
 
-  const getFilteredContacts = () =>
-    contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase())
+  const getFilteredContacts = () => {
+    // console.log(contacts);
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filterText.toLowerCase())
     );
-
+  };
   const filteredContacts = getFilteredContacts();
   return (
     <div
@@ -73,8 +84,10 @@ export const App = () => {
     >
       <h1>Phonebook</h1>
       <ContactForm createContact={createContact} />
+      {isLoading && <h1>Loading...</h1>}
+      {error && <h1>{error}</h1>}
       <h2>Contacts</h2>
-      <SearchFilter onChangeSearch={handleSetFilter} filter={filter} />
+      <SearchFilter onChangeSearch={handleSetFilter} filter={filterText} />
       <Contacts
         contacts={filteredContacts}
         onDeleteContact={handleDeleteContact}

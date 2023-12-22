@@ -20,17 +20,3 @@ export const Contacts = ({ contacts, onDeleteContact }) => {
     </>
   );
 };
-
-// export class Contacts extends Component {
-//   render() {
-//     return (
-//       <div className="wrap">
-//         <ul className="contactList">
-//           {this.props.contacts.map(({ id, name, number }) => (
-//             <Contact key={id} name={name} number={number} />
-//           ))}
-//         </ul>
-//       </div>
-//     );
-//   }
-// }
