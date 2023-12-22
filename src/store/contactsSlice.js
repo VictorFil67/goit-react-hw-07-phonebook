@@ -1,9 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  createContactThunk,
-  deleteContactThunk,
-  fetchContactsThunk,
-} from './operations';
+import { addContact, deleteContact, fetchContacts } from './operations';
 
 const initialState = {
   contacts: {
@@ -34,22 +30,22 @@ const contactsSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(fetchContactsThunk.fulfilled, (state, { payload }) => {
+      .addCase(fetchContacts.fulfilled, (state, { payload }) => {
         state.contacts.items = payload;
         state.contacts.isLoading = false;
       })
-      .addCase(deleteContactThunk.fulfilled, (state, { payload }) => {
+      .addCase(deleteContact.fulfilled, (state, { payload }) => {
         state.contacts.items = state.contacts.items.filter(
           item => item.id !== payload.id
         );
       })
-      .addCase(createContactThunk.fulfilled, (state, { payload }) => {
+      .addCase(addContact.fulfilled, (state, { payload }) => {
         state.contacts.items.push(payload);
       })
-      .addCase(fetchContactsThunk.pending, state => {
+      .addCase(fetchContacts.pending, state => {
         state.contacts.isLoading = true;
       })
-      .addCase(fetchContactsThunk.rejected, (state, { payload }) => {
+      .addCase(fetchContacts.rejected, (state, { payload }) => {
         state.contacts.isLoading = false;
         state.contacts.error = payload;
       });

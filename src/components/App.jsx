@@ -4,7 +4,7 @@ import { SearchFilter } from './SearchFilter/SearchFilter';
 import { useDispatch, useSelector } from 'react-redux';
 import { createContactAction, setFilterAction } from '../store/contactsSlice';
 import { useEffect } from 'react';
-import { deleteContactThunk, fetchContactsThunk } from 'store/operations';
+import { deleteContact, fetchContacts } from 'store/operations';
 import {
   selectContacts,
   selectError,
@@ -22,7 +22,7 @@ export const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchContactsThunk());
+    dispatch(fetchContacts());
   }, [dispatch]);
 
   // useEffect(() => {
@@ -53,7 +53,7 @@ export const App = () => {
 
   const handleDeleteContact = contactId => {
     // setContacts(prev => prev.filter(contact => contact.id !== contactId));
-    dispatch(deleteContactThunk(contactId));
+    dispatch(deleteContact(contactId));
   };
 
   const handleSetFilter = e => {

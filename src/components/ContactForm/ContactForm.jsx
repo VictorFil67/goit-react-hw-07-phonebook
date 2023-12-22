@@ -3,7 +3,7 @@ import s from './ContactForm.module.css';
 
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createContactThunk } from 'store/operations';
+import { addContact } from 'store/operations';
 import { selectContacts } from 'store/selectors';
 // rfc - create func
 export const ContactForm = ({ createContact }) => {
@@ -28,7 +28,7 @@ export const ContactForm = ({ createContact }) => {
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
     if (!isName) {
-      dispatch(createContactThunk({ name, number }));
+      dispatch(addContact({ name, number }));
     } else {
       alert(`${name} is already in contacts`);
     }
