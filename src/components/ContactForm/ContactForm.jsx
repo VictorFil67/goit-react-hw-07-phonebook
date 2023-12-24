@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'store/operations';
 import { selectContacts } from 'store/selectors';
 // rfc - create func
-export const ContactForm = ({ createContact }) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
